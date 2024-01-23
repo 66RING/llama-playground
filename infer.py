@@ -3,6 +3,7 @@ import torch
 import argparse
 from transformers import (
     AutoTokenizer,
+    AutoConfig,
     AutoModelForCausalLM,
 )
 
@@ -53,16 +54,21 @@ def main():
         "--model_name_or_path", type=str, default="meta/Llama-2-7b-chat-hf"
     )
     args = parser.parse_args()
-    
+
     model_name_or_path = args.model_name_or_path
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_name_or_path,
         trust_remote_code=True,
     )
+    config = AutoConfig.from_pretrained(model_name_or_path, trust_remote_code=True)
+    print(config)
+
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path,
+        config=config,
         device_map="auto",
+        attn_implementation="flash_attention_2",
         torch_dtype=torch.float16,
         trust_remote_code=True,
     )
@@ -72,7 +78,6 @@ def main():
         else:
             tokenizer.pad_token_id = 0
 
-    # print(config)
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     params = sum([np.prod(p.size()) for p in model_parameters])
     print(f"trainable params {params}\n")
