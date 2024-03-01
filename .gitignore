@@ -1,3 +1,5 @@
 __pycache__/
 llama-zero/
+.vscode/
+ignore/
 
