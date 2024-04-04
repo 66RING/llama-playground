@@ -2,6 +2,12 @@
 
 ## roadmap
 
+- [x] basic autoregressive inference
+- [x] basic TFLOPS, TPS(token per second) benchmark
+- [x] multi gpu inference
+- [ ] sequence parallel inference for very large scale input sequence
+- [ ] perplexity compute
+
 - generate empty llama of any size with LlamaConfig
 - train with random data
 - train and inference tinyllama
