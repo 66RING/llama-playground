@@ -3,3 +3,4 @@ llama-zero/
 .vscode/
 ignore/
 
+llama_infer/llama-zero
