@@ -4,7 +4,15 @@
 
 算法:
 
-1.  
+## roadmap
+
+- [x] tree attention mask
+- [x] tree attention position id
+- [ ] tree attention
+    - [ ] top k sampling: top k of each branch
+        - 输入多少就会输出多少, tree attn批量输入后输出就是每个分支的输出
+        - 对每个分支取top k即可
+- [ ] result retrieval
 
 ## Tree attention mask construction
 
