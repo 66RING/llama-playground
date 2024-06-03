@@ -28,13 +28,18 @@ def plot_attention(layers_attn_out, token_chars, num_figs_per_row=4, save_path="
         # mean at heads dim
         # ave_score.shape = (seqlen, seqlen)
         ave_score = layers_attn_out[layer_idx][0].mean(dim=0)
+        # ave_score = layers_attn_out[layer_idx][0].max(dim=0).values
+
+        # NOTE: token-wise norm
+        ave_score = ave_score / ave_score.max(dim=0, keepdim=True).values
+
         mask = torch.triu(torch.ones_like(ave_score, dtype=torch.bool), diagonal=1)
         # set axis title
         sns.heatmap(ave_score.numpy(), mask=mask.numpy(), ax=axes[row_idx, col_idx], cmap="YlGnBu", square=True, xticklabels=token_chars, yticklabels=token_chars)
         axes[row_idx, col_idx].set_title(f"Layer {layer_idx}")
         axes[row_idx, col_idx].set_ylabel("query")
         axes[row_idx, col_idx].set_xlabel("key")
-    plt.suptitle("all layers ave")
+    plt.suptitle("all layers (normalized)")
     plt.savefig(save_path)
     plt.close()
 
@@ -71,7 +76,7 @@ def main():
 
     model.eval()
 
-    prompt = "One day, Lily met a Shoggoth."
+    prompt = "Once upon a time, 3 year old Jack was playing in the park. He saw a big, red balloon and he wanted it. He ran to it and grabbed it. He was so happy! Suddenly, a big, mean dog came running towards him. Jack was scared and he dropped the balloon."
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids
     input_ids = input_ids.to(model.device)
     token_chars = tokenizer.convert_ids_to_tokens(input_ids[0])
