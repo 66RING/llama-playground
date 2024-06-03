@@ -1,2 +1,2 @@
 run:
-	python ./viz_utils.py --model_name_or_path /home/ring/Documents/workspace/modules/tinyllama-110M
+	python ./viz_utils.py --model_name_or_path $(MODELS_DIR)/tinyllama-110M
